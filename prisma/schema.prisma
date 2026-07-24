@@ -1,0 +1,106 @@
+// Prisma schema for Medical Test Kit Internal Sales System
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SALES_REP
+  SALES_MANAGER
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(SALES_REP)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  salesRep     SalesRep?
+}
+
+model SalesRep {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone     String?
+  region    String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  customers Customer[]
+  orders    Order[]
+}
+
+model Customer {
+  id           String   @id @default(cuid())
+  name         String
+  organization String?
+  email        String?
+  phone        String?
+  address      String?
+  salesRepId   String
+  salesRep     SalesRep @relation(fields: [salesRepId], references: [id], onDelete: Restrict)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  orders       Order[]
+}
+
+model Product {
+  id          String         @id @default(cuid())
+  name        String
+  sku         String         @unique
+  description String?
+  category    String?
+  unitPrice   Decimal        @db.Decimal(10, 2)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  inventory   InventoryItem?
+  orderItems  OrderItem[]
+}
+
+model InventoryItem {
+  id                String   @id @default(cuid())
+  productId         String   @unique
+  product           Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantityOnHand    Int      @default(0)
+  reorderLevel      Int      @default(10)
+  warehouseLocation String   @default("Main Warehouse")
+  updatedAt         DateTime @updatedAt
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  customerId  String
+  customer    Customer    @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  salesRepId  String
+  salesRep    SalesRep    @relation(fields: [salesRepId], references: [id], onDelete: Restrict)
+  status      OrderStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  fulfilledAt DateTime?
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+}
