@@ -21,6 +21,20 @@ warehouse inventory, and order tracking, with authentication and role-based perm
   `SALES_MANAGER` has full access; `SALES_REP` has limited access scoped to their own
   customers/orders and read-only access to products/inventory.
 
+## Screenshots
+
+| Login | Dashboard |
+| --- | --- |
+| ![Login](docs/screenshots/login.png) | ![Dashboard](docs/screenshots/dashboard.png) |
+
+| Products | Customers |
+| --- | --- |
+| ![Products](docs/screenshots/products.png) | ![Customers](docs/screenshots/customers.png) |
+
+| Orders | Sales Rep Tracking |
+| --- | --- |
+| ![Orders](docs/screenshots/orders.png) | ![Sales Rep Tracking](docs/screenshots/rep-tracking.png) |
+
 ## Tech Stack
 
 - [Next.js](https://nextjs.org) (App Router, Server Actions)
