@@ -69,10 +69,22 @@ NEXTAUTH_URL="http://localhost:3000"
 
 You can generate a secret with `npx auth secret`.
 
+**Prefer a local database?** Start PostgreSQL with Docker Compose and use the local connection
+strings instead — see [DOCKER.md](DOCKER.md):
+
+```bash
+docker compose up -d
+```
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/medical_sales?schema=public"
+DIRECT_URL="postgresql://postgres:postgres@localhost:5433/medical_sales?schema=public"
+```
+
 ### 3. Push the schema and seed sample data
 
 ```bash
-npm run db:push   # creates tables in your Neon database
+npm run db:push   # creates tables in your database (Neon or local Docker)
 npm run db:seed   # seeds realistic demo data (products, customers, reps, orders)
 ```
 
