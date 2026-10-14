@@ -28,7 +28,7 @@ export default function LoginForm({ callbackUrl }: { callbackUrl: string }) {
               name="email"
               type="email"
               required
-              className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-slate-500 focus:outline-none"
+              className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
               placeholder="jane@medtest.com"
             />
           </div>
@@ -41,7 +41,7 @@ export default function LoginForm({ callbackUrl }: { callbackUrl: string }) {
               name="password"
               type="password"
               required
-              className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-slate-500 focus:outline-none"
+              className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
               placeholder="••••••••"
             />
           </div>
