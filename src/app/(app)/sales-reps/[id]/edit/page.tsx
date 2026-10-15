@@ -24,7 +24,7 @@ export default async function EditSalesRepPage({ params }: { params: Promise<{ i
         </div>
         <div>
           <label className={label}>Email</label>
-          <input value={rep.email} disabled className={`${input} bg-slate-100 text-slate-500`} />
+          <input value={rep.email} disabled className={`${input} disabled:bg-slate-100 disabled:text-slate-500`} />
         </div>
         <div>
           <label className={label} htmlFor="role">Role</label>

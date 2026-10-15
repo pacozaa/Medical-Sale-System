@@ -21,20 +21,20 @@ async function main() {
 
   const manager = await prisma.user.create({
     data: {
-      name: "Morgan Lee",
+      name: "สมชาย ศรีสุวรรณ",
       email: "manager@medtest.com",
       passwordHash,
       role: "SALES_MANAGER",
-      salesRep: { create: { region: "National", phone: "555-0100" } },
+      salesRep: { create: { region: "ทั่วประเทศ", phone: "081-555-0100" } },
     },
     include: { salesRep: true },
   });
 
   const repDefs = [
-    { name: "Alice Nguyen", email: "alice.rep@medtest.com", region: "Northeast", phone: "555-0101" },
-    { name: "Ben Carter", email: "ben.rep@medtest.com", region: "Midwest", phone: "555-0102" },
-    { name: "Carla Diaz", email: "carla.rep@medtest.com", region: "South", phone: "555-0103" },
-    { name: "David Kim", email: "david.rep@medtest.com", region: "West", phone: "555-0104" },
+    { name: "พิมพ์ชนก วงศ์สว่าง", email: "alice.rep@medtest.com", region: "กรุงเทพฯ และปริมณฑล", phone: "081-555-0101" },
+    { name: "ธนากร จันทร์เพ็ญ", email: "ben.rep@medtest.com", region: "ภาคเหนือ", phone: "082-555-0102" },
+    { name: "กัญญารัตน์ แสงทอง", email: "carla.rep@medtest.com", region: "ภาคตะวันออกเฉียงเหนือ", phone: "083-555-0103" },
+    { name: "วีรพงษ์ ทองดี", email: "david.rep@medtest.com", region: "ภาคใต้", phone: "084-555-0104" },
   ];
 
   const reps = [];
@@ -86,28 +86,29 @@ async function main() {
     products.push(product);
   }
 
+  // Real hospitals (see Wikipedia "List of hospitals in Thailand"); contacts are fictional.
   const customerDefs = [
-    { name: "Dr. Emily Chen", organization: "Riverside Family Clinic", city: "Boston, MA" },
-    { name: "Dr. James Walker", organization: "Lakeside Urgent Care", city: "Chicago, IL" },
-    { name: "Dr. Sofia Ramirez", organization: "Sunbelt Health Center", city: "Austin, TX" },
-    { name: "Dr. Priya Patel", organization: "Golden Gate Medical Group", city: "San Francisco, CA" },
-    { name: "Dr. Michael Brown", organization: "Downtown Pharmacy Clinic", city: "New York, NY" },
-    { name: "Dr. Laura Garcia", organization: "Prairie Community Clinic", city: "Omaha, NE" },
-    { name: "Dr. Kevin O'Neil", organization: "Coastal Diagnostics Lab", city: "Miami, FL" },
-    { name: "Dr. Hannah Scott", organization: "Mountain View Health", city: "Denver, CO" },
-];
+    { name: "นพ.อนันต์ รัตนวิจิตร", organization: "โรงพยาบาลศิริราช", address: "เขตบางกอกน้อย กรุงเทพมหานคร", email: "anan.r@siriraj.example.com", phone: "02-555-0201", repIndex: 0 },
+    { name: "พญ.สุภาพร เจริญสุข", organization: "โรงพยาบาลรามาธิบดี", address: "เขตราชเทวี กรุงเทพมหานคร", email: "supaporn.c@rama.example.com", phone: "02-555-0202", repIndex: 0 },
+    { name: "นพ.ปกรณ์ พิพัฒน์กุล", organization: "โรงพยาบาลจุฬาลงกรณ์ สภากาชาดไทย", address: "เขตปทุมวัน กรุงเทพมหานคร", email: "pakorn.p@chula.example.com", phone: "02-555-0203", repIndex: 0 },
+    { name: "พญ.นภัสสร ศรีวิไล", organization: "โรงพยาบาลบำรุงราษฎร์", address: "เขตวัฒนา กรุงเทพมหานคร", email: "napatsorn.s@bumrungrad.example.com", phone: "02-555-0204", repIndex: 0 },
+    { name: "นพ.ชัยวัฒน์ สุขสวัสดิ์", organization: "โรงพยาบาลสมิติเวช สุขุมวิท", address: "เขตวัฒนา กรุงเทพมหานคร", email: "chaiwat.s@samitivej.example.com", phone: "02-555-0205", repIndex: 0 },
+    { name: "พญ.ลลิดา คำภีระ", organization: "โรงพยาบาลมหาราชนครเชียงใหม่", address: "อ.เมืองเชียงใหม่ จ.เชียงใหม่", email: "lalida.k@maharaj.example.com", phone: "053-555-0206", repIndex: 1 },
+    { name: "นพ.ศักดิ์ชัย บุญเรือง", organization: "โรงพยาบาลศรีนครินทร์", address: "อ.เมืองขอนแก่น จ.ขอนแก่น", email: "sakchai.b@srinagarind.example.com", phone: "043-555-0207", repIndex: 2 },
+    { name: "พญ.อรอุมา เพชรรัตน์", organization: "โรงพยาบาลสงขลานครินทร์", address: "อ.หาดใหญ่ จ.สงขลา", email: "onuma.p@songklanagarind.example.com", phone: "074-555-0208", repIndex: 3 },
+  ];
 
   const customers = [];
   for (let i = 0; i < customerDefs.length; i++) {
     const def = customerDefs[i];
-    const rep = reps[i % reps.length];
+    const rep = reps[def.repIndex];
     const customer = await prisma.customer.create({
       data: {
         name: def.name,
         organization: def.organization,
-        email: `${def.name.split(" ").pop()!.toLowerCase()}@${def.organization.split(" ")[0].toLowerCase()}.example.com`,
-        phone: `555-02${String(10 + i).padStart(2, "0")}`,
-        address: def.city,
+        email: def.email,
+        phone: def.phone,
+        address: def.address,
         salesRepId: rep.salesRep!.id,
       },
     });

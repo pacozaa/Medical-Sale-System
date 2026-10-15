@@ -7,7 +7,7 @@ export default async function NewOrderPage() {
   const isManager = session?.user.role === "SALES_MANAGER";
   const salesRepId = session?.user.salesRepId ?? "";
 
-  const [customers, products, salesRepsRaw] = await Promise.all([
+  const [customers, productsRaw, salesRepsRaw] = await Promise.all([
     prisma.customer.findMany({
       where: isManager ? {} : { salesRepId },
       orderBy: { name: "asc" },
@@ -18,6 +18,7 @@ export default async function NewOrderPage() {
       : prisma.salesRep.findMany({ where: { id: salesRepId }, include: { user: true } }),
   ]);
 
+  const products = productsRaw.map((p) => ({ id: p.id, name: p.name, sku: p.sku }));
   const salesReps = salesRepsRaw.map((rep) => ({ id: rep.id, name: rep.user.name }));
 
   return (
